@@ -10,6 +10,7 @@ import cloud from "./assets/Cloud.png";
 function preload() {
   console.log("Preload");
 
+  // Spritesheet configs
   const walkSpriteSheetDetails = {
     frameWidth: 141,
     frameHeight: 233,
@@ -24,16 +25,19 @@ function preload() {
     endFrame: 9,
   };
 
+  // Load spritesheets
   this.load.spritesheet(
     "walkRightSprite",
     walkRightSpriteSheet,
     walkSpriteSheetDetails
   );
+
   this.load.spritesheet(
     "walkLeftSprite",
     walkLeftSpriteSheet,
     walkSpriteSheetDetails
   );
+
   this.load.spritesheet(
     "jumpRightSprite",
     jumpRightSpriteSheet,
@@ -46,12 +50,15 @@ function preload() {
     jumpSpriteSheetDetails
   );
 
+  // Load images
   this.load.image("ground", ground);
   this.load.image("cloud", cloud);
 }
 
 function create() {
   console.log("Create");
+
+  // TODO: Create a namespace to organize stuff
 
   this.add.image(400, 150, "cloud");
   this.add.image(0, 0, "cloud").setOrigin(0, 0); // Top left
@@ -60,9 +67,13 @@ function create() {
   this.platforms.create(400, 575, "ground");
   this.platforms.create(150, 575, "ground");
   this.platforms.create(650, 575, "ground");
-
+  
+  // Main sprite
+  // TODO: Handle player 2 sprite
   this.char = this.physics.add.sprite(300, 200, "walkRightSprite");
-
+  this.char.setCollideWorldBounds(true);
+  
+  // Sprite animations
   this.anims.create({
     key: "walkRight",
     frames: this.anims.generateFrameNumbers("walkRightSprite", {
@@ -72,7 +83,7 @@ function create() {
     frameRate: 15,
     repeat: -1,
   });
-
+  
   this.anims.create({
     key: "walkLeft",
     frames: this.anims.generateFrameNumbers("walkLeftSprite", {
@@ -82,7 +93,7 @@ function create() {
     frameRate: 15,
     repeat: -1,
   });
-
+  
   this.anims.create({
     key: "idleLeft",
     frames: this.anims.generateFrameNumbers("walkLeftSprite", {
@@ -92,7 +103,7 @@ function create() {
     frameRate: 15,
     repeat: 0,
   });
-
+  
   this.anims.create({
     key: "idleRight",
     frames: this.anims.generateFrameNumbers("walkRightSprite", {
@@ -112,7 +123,7 @@ function create() {
     frameRate: 15,
     repeat: 0,
   });
-
+  
   this.anims.create({
     key: "jumpLeft",
     frames: this.anims.generateFrameNumbers("jumpLeftSprite", {
@@ -122,7 +133,7 @@ function create() {
     frameRate: 15,
     repeat: 0,
   });
-
+  
   this.anims.create({
     key: "fallLeft",
     frames: this.anims.generateFrameNumbers("jumpLeftSprite", {
@@ -132,7 +143,7 @@ function create() {
     frameRate: 10,
     repeat: 0,
   });
-
+  
   this.anims.create({
     key: "fallRight",
     frames: this.anims.generateFrameNumbers("jumpRightSprite", {
@@ -143,14 +154,14 @@ function create() {
     repeat: 0,
   });
 
-  this.char.setCollideWorldBounds(true);
-
   this.physics.add.collider(this.char, this.platforms);
 }
 
 function update() {
   const cursors = this.input.keyboard.createCursorKeys();
-
+  
+  // TODO: This definitely needs refactoring
+  // TODO: Potentially need debouncing of some sorts
   if (cursors.right.isDown) {
     this.char.setVelocityX(300);
     if (this.char.body.touching.down) {
