@@ -1,4 +1,3 @@
-import "./style.css";
 import * as Phaser from "phaser";
 import walkRightSpriteSheet from "./assets/WalkRight-141-233.png";
 import walkLeftSpriteSheet from "./assets/WalkLeft-141-233.png";
@@ -58,7 +57,9 @@ function create() {
   this.add.image(0, 0, "cloud").setOrigin(0, 0); // Top left
 
   this.platforms = this.physics.add.staticGroup();
-  this.platforms.create(400, 568, "ground");
+  this.platforms.create(400, 575, "ground");
+  this.platforms.create(150, 575, "ground");
+  this.platforms.create(650, 575, "ground");
 
   this.char = this.physics.add.sprite(300, 200, "walkRightSprite");
 
@@ -108,7 +109,7 @@ function create() {
       start: 0,
       end: 7,
     }),
-    frameRate: 10,
+    frameRate: 15,
     repeat: 0,
   });
 
@@ -118,7 +119,7 @@ function create() {
       start: 0,
       end: 7,
     }),
-    frameRate: 10,
+    frameRate: 15,
     repeat: 0,
   });
 
