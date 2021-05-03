@@ -1,6 +1,9 @@
 # Draw
 Splatter? (e.g. splatter art)
 
+## TODO
+- Might need to adjust resolution/ar or brush hardness for blurriness
+
 ## MVP
 
 - Health system (+ dummy AI)
