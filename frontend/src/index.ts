@@ -1,11 +1,14 @@
 import * as Phaser from "phaser";
-import walkRightSpriteSheet from "./assets/WalkRight-141-233.png";
-import walkLeftSpriteSheet from "./assets/WalkLeft-141-233.png";
-import jumpRightSpriteSheet from "./assets/JumpRight-141-233.png";
-import jumpLeftSpriteSheet from "./assets/JumpLeft-141-233.png";
 
-import ground from "./assets/Ground.png";
-import cloud from "./assets/Cloud.png";
+import walkRightSpriteSheet from "./assets/WalkRight2-141-233.png";
+import walkLeftSpriteSheet from "./assets/WalkLeft2-141-233.png";
+import jumpRightSpriteSheet from "./assets/JumpRight2-141-233.png";
+import jumpLeftSpriteSheet from "./assets/JumpLeft2-141-233.png";
+import attackLeftSpriteSheet from "./assets/AttackLeft-470-234.png";
+import attackRightSpriteSheet from "./assets/AttackRight-470-234.png";
+
+import ground from "./assets/Ground2.png";
+import cloud from "./assets/Cloud2.png";
 
 function preload() {
   console.log("Preload");
@@ -23,6 +26,13 @@ function preload() {
     frameHeight: 233,
     startFrame: 0,
     endFrame: 9,
+  };
+
+  const attackSpriteSheetDetails = {
+    frameWidth: 470,
+    frameHeight: 234,
+    startFrame: 0,
+    endFrame: 5,
   };
 
   // Load spritesheets
@@ -50,6 +60,18 @@ function preload() {
     jumpSpriteSheetDetails
   );
 
+  this.load.spritesheet(
+    "attackLeftSprite",
+    attackLeftSpriteSheet,
+    attackSpriteSheetDetails
+  );
+
+  this.load.spritesheet(
+    "attackRightSprite",
+    attackRightSpriteSheet,
+    attackSpriteSheetDetails
+  );
+
   // Load images
   this.load.image("ground", ground);
   this.load.image("cloud", cloud);
@@ -60,19 +82,21 @@ function create() {
 
   // TODO: Create a namespace to organize stuff
 
-  this.add.image(400, 150, "cloud");
-  this.add.image(0, 0, "cloud").setOrigin(0, 0); // Top left
+  this.add.image(750, 150, "cloud").setScale(0.3);
+  this.add.image(-20, 40, "cloud").setScale(0.3).setOrigin(0, 0);
+  this.add.image(250, 150, "cloud").setScale(0.3).setOrigin(0, 0);
+  this.add.image(400, 10, "cloud").setScale(0.3).setOrigin(0, 0);
 
   this.platforms = this.physics.add.staticGroup();
   this.platforms.create(400, 575, "ground");
   this.platforms.create(150, 575, "ground");
   this.platforms.create(650, 575, "ground");
-  
+
   // Main sprite
   // TODO: Handle player 2 sprite
   this.char = this.physics.add.sprite(300, 200, "walkRightSprite");
   this.char.setCollideWorldBounds(true);
-  
+
   // Sprite animations
   this.anims.create({
     key: "walkRight",
@@ -83,7 +107,7 @@ function create() {
     frameRate: 15,
     repeat: -1,
   });
-  
+
   this.anims.create({
     key: "walkLeft",
     frames: this.anims.generateFrameNumbers("walkLeftSprite", {
@@ -93,7 +117,7 @@ function create() {
     frameRate: 15,
     repeat: -1,
   });
-  
+
   this.anims.create({
     key: "idleLeft",
     frames: this.anims.generateFrameNumbers("walkLeftSprite", {
@@ -103,7 +127,7 @@ function create() {
     frameRate: 15,
     repeat: 0,
   });
-  
+
   this.anims.create({
     key: "idleRight",
     frames: this.anims.generateFrameNumbers("walkRightSprite", {
@@ -123,7 +147,7 @@ function create() {
     frameRate: 15,
     repeat: 0,
   });
-  
+
   this.anims.create({
     key: "jumpLeft",
     frames: this.anims.generateFrameNumbers("jumpLeftSprite", {
@@ -133,7 +157,7 @@ function create() {
     frameRate: 15,
     repeat: 0,
   });
-  
+
   this.anims.create({
     key: "fallLeft",
     frames: this.anims.generateFrameNumbers("jumpLeftSprite", {
@@ -143,7 +167,7 @@ function create() {
     frameRate: 10,
     repeat: 0,
   });
-  
+
   this.anims.create({
     key: "fallRight",
     frames: this.anims.generateFrameNumbers("jumpRightSprite", {
@@ -154,15 +178,58 @@ function create() {
     repeat: 0,
   });
 
+  const lastAttackRightFrame = { key: "attackRightSprite", frame: 5 };
+  const lastAttackLeftFrame = { key: "attackLeftSprite", frame: 5 };
+
+  this.anims.create({
+    key: "attackRight",
+    frames: [
+      ...this.anims.generateFrameNumbers("attackRightSprite", {
+        start: 0,
+        end: 5,
+      }),
+      lastAttackRightFrame,
+    ],
+    frameRate: 15,
+    repeat: 0,
+  });
+
+  this.anims.create({
+    key: "attackLeft",
+    frames: [
+      ...this.anims.generateFrameNumbers("attackLeftSprite", {
+        start: 0,
+        end: 5,
+      }),
+      lastAttackLeftFrame,
+    ],
+    frameRate: 15,
+    repeat: 0,
+  });
+
   this.physics.add.collider(this.char, this.platforms);
 }
 
 function update() {
   const cursors = this.input.keyboard.createCursorKeys();
-  
+
+  // TODO: Very temp
+  if (this.char.isAttacking) return;
+
   // TODO: This definitely needs refactoring
   // TODO: Potentially need debouncing of some sorts
-  if (cursors.right.isDown) {
+  if (this.input.activePointer.isDown && !this.char.isAttacking) {
+    this.char.setVelocityX(0);
+    this.char.isAttacking = true;
+    if (this.char.facing === "left") {
+      this.char.anims.play("attackLeft", true);
+    } else {
+      this.char.anims.play("attackRight", true);
+    }
+    this.char.once("animationcomplete", () => {
+      this.char.isAttacking = false;
+    });
+  } else if (cursors.right.isDown) {
     this.char.setVelocityX(300);
     if (this.char.body.touching.down) {
       this.char.anims.play("walkRight", true);
@@ -194,7 +261,7 @@ function update() {
     }
   }
 
-  if (cursors.up.isDown && this.char.body.touching.down) {
+  if (cursors.space.isDown && this.char.body.touching.down) {
     this.char.setVelocityY(-600);
     this.char.isInJumpingAnimation = true;
 
