@@ -208,11 +208,17 @@ function create() {
   });
 
   this.physics.add.collider(this.char, this.platforms);
+
+  this.cursors = this.input.keyboard.addKeys({
+    up: Phaser.Input.Keyboard.KeyCodes.W,
+    down: Phaser.Input.Keyboard.KeyCodes.S,
+    left: Phaser.Input.Keyboard.KeyCodes.A,
+    right: Phaser.Input.Keyboard.KeyCodes.D,
+    space: Phaser.Input.Keyboard.KeyCodes.SPACE,
+  });
 }
 
 function update() {
-  const cursors = this.input.keyboard.createCursorKeys();
-
   // TODO: Very temp
   if (this.char.isAttacking) return;
 
@@ -229,14 +235,18 @@ function update() {
     this.char.once("animationcomplete", () => {
       this.char.isAttacking = false;
     });
-  } else if (cursors.right.isDown) {
-    this.char.setVelocityX(300);
+  } else if (this.cursors.right.isDown) {
+    if (!this.char.isInJumpingAnimation) {
+      this.char.setVelocityX(500);
+    }
     if (this.char.body.touching.down) {
       this.char.anims.play("walkRight", true);
     }
     this.char.facing = "right";
-  } else if (cursors.left.isDown) {
-    this.char.setVelocityX(-300);
+  } else if (this.cursors.left.isDown) {
+    if (!this.char.isInJumpingAnimation) {
+      this.char.setVelocityX(-500);
+    }
     if (this.char.body.touching.down) {
       this.char.anims.play("walkLeft", true);
     }
@@ -261,8 +271,8 @@ function update() {
     }
   }
 
-  if (cursors.space.isDown && this.char.body.touching.down) {
-    this.char.setVelocityY(-600);
+  if (this.cursors.space.isDown && this.char.body.touching.down) {
+    this.char.setVelocityY(-500);
     this.char.isInJumpingAnimation = true;
 
     this.char.once("animationcomplete", () => {
