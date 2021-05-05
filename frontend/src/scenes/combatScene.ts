@@ -133,14 +133,15 @@ class CombatScene extends Phaser.Scene {
       .setOrigin(0, 0);
 
     this.platforms = this.physics.add.staticGroup();
-    this.platforms.create(400, 575, this.spriteNames.GROUND);
-    this.platforms.create(150, 575, this.spriteNames.GROUND);
-    this.platforms.create(650, 575, this.spriteNames.GROUND);
+    this.platforms.create(0, 585, this.spriteNames.GROUND);
 
     // Main sprite
     // TODO: Handle player 2 sprite
     this.char = this.physics.add.sprite(300, 200, this.spriteNames.RUN);
     this.char.setCollideWorldBounds(true);
+    // TODO: Very temp, just resize the assets
+    this.char.setScale(0.5);
+    // TODO: This is just for collision box, input.hitArea needs to be updated for hitbox?
     this.char.setSize(141, 234);
 
     // Sprite animations
