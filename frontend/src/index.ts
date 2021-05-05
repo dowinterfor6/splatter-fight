@@ -1,6 +1,6 @@
 import * as Phaser from "phaser";
 
-import CombatScene from "./scenes/combatScene";
+import CombatScene from "./scenes/CombatScene";
 
 const config = {
   type: Phaser.AUTO,
