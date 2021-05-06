@@ -188,7 +188,7 @@ class CombatScene extends Phaser.Scene {
     const textPosOffset = 50;
 
     this.p1HealthDisplay = this.add.text(textPosOffset, textPosOffset, "100%", {
-      fontSize: "86px",
+      fontSize: "72px",
       fontFamily: "Helvetica",
       color: "#FFF",
       strokeThickness: 10,
@@ -197,7 +197,7 @@ class CombatScene extends Phaser.Scene {
 
     this.p2HealthDisplay = this.add
       .text(gameWidth - textPosOffset, textPosOffset, "100%", {
-        fontSize: "86px",
+        fontSize: "72px",
         fontFamily: "Helvetica",
         color: "#FFF",
         strokeThickness: 10,
@@ -221,7 +221,7 @@ class CombatScene extends Phaser.Scene {
       if (this.players.player1.charState.hasHit) return;
 
       this.players.player1.charState.hasHit = true;
-      this.players.player1.paintSplatter();
+      // this.players.player1.paintSplatter();
       this.players.player2.takeDamage(this.players.player1.attackDamage);
     }
 
@@ -229,7 +229,7 @@ class CombatScene extends Phaser.Scene {
       if (this.players.player2.charState.hasHit) return;
 
       this.players.player2.charState.hasHit = true;
-      this.players.player2.paintSplatter();
+      // this.players.player2.paintSplatter();
       this.players.player1.takeDamage(this.players.player2.attackDamage);
     }
   }

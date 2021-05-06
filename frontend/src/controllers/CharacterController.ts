@@ -152,6 +152,7 @@ class Character extends Phaser.GameObjects.GameObject {
         !this.charState.isAttacking
       ) {
         this.charState.isAttacking = true;
+        this.paintSplatter();
         this.charState.hasHit = false;
         this.char.anims.play(this.animNames.ATTACK, true);
         this.char.once("animationcomplete", () => {
@@ -256,14 +257,14 @@ class Character extends Phaser.GameObjects.GameObject {
       .ellipse(
         splatterOrigin.x + (Math.random() * 2 - 1) * randVariation,
         splatterOrigin.y + (Math.random() * 2 - 1) * randVariation,
-        splatterSize,
-        splatterSize,
+        splatterSize + (Math.random() * 2 - 1) * randVariation,
+        splatterSize + (Math.random() * 2 - 1) * randVariation,
         randColor,
         alpha
       )
-      .setDepth(-1);
+      .setDepth(-10);
 
-    const randBlobs = Math.round(Math.random() * 5);
+    const randBlobs = 10 - Math.round(Math.random() * 5);
     const blobSize = splatterSize / 2;
 
     for (let i = 0; i < randBlobs; i++) {
@@ -276,22 +277,25 @@ class Character extends Phaser.GameObjects.GameObject {
           randColor,
           alpha
         )
-        .setDepth(-1);
+        .setDepth(-10);
     }
 
-    const splatterBlobs = Math.round(Math.random() * 30 - Math.random() * 10);
+    const splatterBlobs = 15 - Math.round(Math.random() * 10);
     const splatterBlobSize = blobSize / 3;
     const xModifier = this.charState.isFacing === "left" ? -1 : 1;
     const splatterBlobXVariation =
-      Math.random() * 150 - Math.random() * splatterBlobSize;
+      (5 - Math.random() * 3) * splatterSize - Math.random() * splatterBlobSize;
     const splatterBlobYVariation = Math.random() * blobSize;
-    const splatterBlobSizeVariation = Math.random() * blobSize;
+    const splatterBlobSizeVariation = Math.random() * splatterBlobSize;
 
     for (let i = 0; i < splatterBlobs; i++) {
+      const newX = xModifier * Math.random() * splatterBlobXVariation;
       this.scene.add
         .ellipse(
-          splatterOrigin.x + xModifier * Math.random() * splatterBlobXVariation,
-          splatterOrigin.y + (Math.random() * 2 - 1) * splatterBlobYVariation,
+          splatterOrigin.x + newX,
+          splatterOrigin.y +
+            (Math.random() * 2 - 1) * (newX / 3 + splatterBlobYVariation) +
+            ((Math.random() * 2 - 1) * splatterSize) / 2,
           splatterBlobSize +
             (Math.random() * 2 - 1) * splatterBlobSizeVariation,
           splatterBlobSize +
