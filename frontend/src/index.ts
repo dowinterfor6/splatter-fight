@@ -2,10 +2,13 @@ import * as Phaser from "phaser";
 
 import CombatScene from "./scenes/CombatScene";
 
+export const gameWidth = 800;
+export const gameHeight = 600;
+
 const config = {
   type: Phaser.AUTO,
-  width: 800,
-  height: 600,
+  width: gameWidth,
+  height: gameHeight,
   physics: {
     default: "arcade",
     arcade: {

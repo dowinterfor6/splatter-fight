@@ -63,7 +63,7 @@ class Character extends Phaser.GameObjects.GameObject {
       isAttacking: false,
       isFacing: facing,
       isJumping: false,
-      hasHit: false,
+      hasHit: true,
     };
 
     // TODO: Wasn't there a shorthand for this
@@ -74,8 +74,7 @@ class Character extends Phaser.GameObjects.GameObject {
 
     // TODO: Very temp, just resize the assets
     this.char.setScale(0.5);
-    // TODO: This is just for collision box, input.hitArea needs to be updated for hitbox?
-    this.char.setSize(141, 234);
+    this.char.setSize(75, 234);
 
     // this.attackHitbox = scene.physics.add.sprite(140, 0, "");
     this.attackHitbox = scene.add.rectangle(0, 0, 100, 50, 0x010101, 0);
@@ -212,6 +211,95 @@ class Character extends Phaser.GameObjects.GameObject {
       this.attackHitbox.x -= 65;
     } else {
       this.attackHitbox.x += 65;
+    }
+  }
+
+  paintSplatter() {
+    const splatterSize = 50;
+    const splatterColorPalette = [
+      0x844a7c,
+      0x8158a6,
+      0x9e4d74,
+      0xe166af,
+      0xe96a7d,
+      0xf47a6f,
+      0xf9ab49,
+      0xfaab46,
+      0xf3d70a,
+      0xf3d14c,
+      0xc4da5b,
+      0xcbdb30,
+      0xa7d266,
+      0x6bb956,
+      0x67c39c,
+      0x1b9bc2,
+      0x382e6d,
+    ];
+    const alpha = 1;
+
+    const randVariation = 20;
+
+    const randIdx = Math.round(
+      Math.random() * (splatterColorPalette.length - 1)
+    );
+
+    const randColor = splatterColorPalette[randIdx];
+
+    let splatterOrigin;
+    if (this.charState.isFacing === "left") {
+      splatterOrigin = this.attackHitbox.getLeftCenter();
+    } else {
+      splatterOrigin = this.attackHitbox.getRightCenter();
+    }
+
+    this.scene.add
+      .ellipse(
+        splatterOrigin.x + (Math.random() * 2 - 1) * randVariation,
+        splatterOrigin.y + (Math.random() * 2 - 1) * randVariation,
+        splatterSize,
+        splatterSize,
+        randColor,
+        alpha
+      )
+      .setDepth(-1);
+
+    const randBlobs = Math.round(Math.random() * 5);
+    const blobSize = splatterSize / 2;
+
+    for (let i = 0; i < randBlobs; i++) {
+      this.scene.add
+        .ellipse(
+          splatterOrigin.x + Math.random() * randVariation,
+          splatterOrigin.y + (Math.random() * 2 - 1) * randVariation,
+          blobSize + (Math.random() * 2 - 1) * randVariation,
+          blobSize + (Math.random() * 2 - 1) * randVariation,
+          randColor,
+          alpha
+        )
+        .setDepth(-1);
+    }
+
+    const splatterBlobs = Math.round(Math.random() * 30 - Math.random() * 10);
+    const splatterBlobSize = blobSize / 3;
+    const xModifier = this.charState.isFacing === "left" ? -1 : 1;
+    const splatterBlobXVariation =
+      Math.random() * 150 - Math.random() * splatterBlobSize;
+    const splatterBlobYVariation = Math.random() * blobSize;
+    const splatterBlobSizeVariation = Math.random() * blobSize;
+
+    for (let i = 0; i < splatterBlobs; i++) {
+      this.scene.add
+        .ellipse(
+          splatterOrigin.x + xModifier * Math.random() * splatterBlobXVariation,
+          splatterOrigin.y + (Math.random() * 2 - 1) * splatterBlobYVariation,
+          splatterBlobSize +
+            (Math.random() * 2 - 1) * splatterBlobSizeVariation,
+          splatterBlobSize +
+            (Math.random() * 2 - 1) * splatterBlobSizeVariation,
+          randColor,
+          alpha
+        )
+        .setDepth(-1);
     }
   }
 

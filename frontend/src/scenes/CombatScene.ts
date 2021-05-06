@@ -13,6 +13,8 @@ import {
 import Character from "../controllers/CharacterController";
 import AnimationController from "../controllers/AnimationController";
 
+import { gameWidth, gameHeight } from "../index";
+
 class CombatScene extends Phaser.Scene {
   players: {
     player1?: Character;
@@ -27,6 +29,9 @@ class CombatScene extends Phaser.Scene {
   animNames: iAnimNames;
 
   animationController: AnimationController;
+
+  p1HealthDisplay: Phaser.GameObjects.Text;
+  p2HealthDisplay: Phaser.GameObjects.Text;
 
   constructor() {
     super({});
@@ -114,11 +119,13 @@ class CombatScene extends Phaser.Scene {
       .setOrigin(0, 0);
 
     this.platforms = this.physics.add.staticGroup();
-    this.platforms.create(0, 585, this.spriteNames.GROUND);
+    this.platforms.create(0, gameHeight, this.spriteNames.GROUND);
+
+    const playerStartingPosXOffset = 100;
 
     this.players.player1 = new Character(
       this,
-      200,
+      playerStartingPosXOffset,
       200,
       this.spriteNames.RUN,
       "right",
@@ -133,7 +140,7 @@ class CombatScene extends Phaser.Scene {
 
     this.players.player2 = new Character(
       this,
-      600,
+      gameWidth - playerStartingPosXOffset,
       200,
       this.spriteNames.RUN,
       "left",
@@ -164,13 +171,33 @@ class CombatScene extends Phaser.Scene {
     this.physics.add.overlap(p2AttackBox, p1Body, this.checkOverlap.bind(this));
     // TODO: Parry
     // this.physics.add.overlap(p1AttackBox, p2AttackBox, this.checkOverlap.bind(this));
+
+    const textPosOffset = 50;
+
+    this.p1HealthDisplay = this.add.text(textPosOffset, textPosOffset, "100%", {
+      fontSize: "86px",
+      fontFamily: "Helvetica",
+      color: "#FFF",
+      strokeThickness: 10,
+      stroke: "#000",
+    });
+
+    this.p2HealthDisplay = this.add
+      .text(gameWidth - textPosOffset, textPosOffset, "100%", {
+        fontSize: "86px",
+        fontFamily: "Helvetica",
+        color: "#FFF",
+        strokeThickness: 10,
+        stroke: "#000",
+      })
+      .setOrigin(1, 0);
   }
 
   update() {
-    // this.checkOverlap();
-
     this.players.player1.updateChar();
     this.players.player2.updateChar();
+    this.p1HealthDisplay.setText(`${this.players.player1.health}%`);
+    this.p2HealthDisplay.setText(`${this.players.player2.health}%`);
   }
 
   checkOverlap(attackBox: iAttackHitbox, char: iChar) {
@@ -180,14 +207,15 @@ class CombatScene extends Phaser.Scene {
       if (this.players.player1.charState.hasHit) return;
 
       this.players.player1.charState.hasHit = true;
+      this.players.player1.paintSplatter();
       this.players.player2.takeDamage(this.players.player1.attackDamage);
-      console.log(this.players.player2.health);
     }
 
     if (attackingPlayer === 2) {
       if (this.players.player2.charState.hasHit) return;
 
       this.players.player2.charState.hasHit = true;
+      this.players.player2.paintSplatter();
       this.players.player1.takeDamage(this.players.player2.attackDamage);
     }
   }

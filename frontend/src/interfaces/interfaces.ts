@@ -37,6 +37,7 @@ export interface iAttackHitbox extends Phaser.GameObjects.Rectangle {
   player?: 1 | 2;
 }
 
-export interface iChar extends Phaser.Types.Physics.Arcade.SpriteWithDynamicBody {
+export interface iChar
+  extends Phaser.Types.Physics.Arcade.SpriteWithDynamicBody {
   player?: 1 | 2;
 }
