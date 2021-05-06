@@ -14,6 +14,7 @@ import Character from "../controllers/CharacterController";
 import AnimationController from "../controllers/AnimationController";
 
 import { gameWidth, gameHeight } from "../index";
+import CloudController from "../controllers/CloudController";
 
 class CombatScene extends Phaser.Scene {
   players: {
@@ -29,6 +30,8 @@ class CombatScene extends Phaser.Scene {
   animNames: iAnimNames;
 
   animationController: AnimationController;
+
+  cloudController: CloudController;
 
   p1HealthDisplay: Phaser.GameObjects.Text;
   p2HealthDisplay: Phaser.GameObjects.Text;
@@ -104,19 +107,29 @@ class CombatScene extends Phaser.Scene {
   create() {
     console.log("Create");
 
-    this.add.image(750, 150, this.spriteNames.CLOUD).setScale(0.3);
-    this.add
-      .image(-20, 40, this.spriteNames.CLOUD)
-      .setScale(0.3)
-      .setOrigin(0, 0);
-    this.add
-      .image(250, 150, this.spriteNames.CLOUD)
-      .setScale(0.3)
-      .setOrigin(0, 0);
-    this.add
-      .image(400, 10, this.spriteNames.CLOUD)
-      .setScale(0.3)
-      .setOrigin(0, 0);
+    // this.add.image(750, 150, this.spriteNames.CLOUD).setScale(0.3);
+    // this.add
+    //   .image(-20, 40, this.spriteNames.CLOUD)
+    //   .setScale(0.3)
+    //   .setOrigin(0, 0);
+    // this.add
+    //   .image(250, 150, this.spriteNames.CLOUD)
+    //   .setScale(0.3)
+    //   .setOrigin(0, 0);
+    // this.add
+    //   .image(400, 10, this.spriteNames.CLOUD)
+    //   .setScale(0.3)
+    //   .setOrigin(0, 0);
+
+    this.cloudController = new CloudController(
+      this,
+      this.spriteNames.CLOUD,
+      10,
+      0.05,
+      1
+    );
+
+    this.cloudController.initSpawn();
 
     this.platforms = this.physics.add.staticGroup();
     this.platforms.create(0, gameHeight, this.spriteNames.GROUND);
@@ -194,6 +207,7 @@ class CombatScene extends Phaser.Scene {
   }
 
   update() {
+    this.cloudController.update();
     this.players.player1.updateChar();
     this.players.player2.updateChar();
     this.p1HealthDisplay.setText(`${this.players.player1.health}%`);

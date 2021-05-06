@@ -299,7 +299,7 @@ class Character extends Phaser.GameObjects.GameObject {
           randColor,
           alpha
         )
-        .setDepth(-1);
+        .setDepth(-10);
     }
   }
 
