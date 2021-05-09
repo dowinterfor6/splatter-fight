@@ -1,18 +1,14 @@
-# Draw
-Splatter? (e.g. splatter art)
+# Splatter Skirmish (?)
 
 ## TODO
-- Might need to adjust resolution/ar or brush hardness for blurriness
 
-## MVP
-
-- Health system (+ dummy AI)
-- Attack with weapon (brush)
-- Dodge causing stagger (stamina system)
-- Weapon splatter desaturated colors onto background
-- UI/Menu system (vs AI)
-
-## Stretch
-
-- vs other players via code
-- vs other players via match making
+- Cloud Spawning buffer time (or another method to not have clouds spawn too stacked together)
+- Paint splatter direction
+- Platform controller
+- Scroll for camera zoom
+- Full screen game, fixed game area
+- An actual AI
+- Websockets multiplayer (with room)
+  - With latency
+  - lol gl
+- Connect with strangers, "matchmaking"

@@ -13,6 +13,9 @@ export interface iKeypress {
   left?: iKeypressState;
   right?: iKeypressState;
   space?: iKeypressState;
+  pointer?: {
+    isDown: boolean;
+  };
 }
 
 export interface iSpriteNames {
@@ -40,4 +43,19 @@ export interface iAttackHitbox extends Phaser.GameObjects.Rectangle {
 export interface iChar
   extends Phaser.Types.Physics.Arcade.SpriteWithDynamicBody {
   player?: 1 | 2;
+}
+
+export interface iEnemyKeypress {
+  left: {
+    isDown: boolean;
+  };
+  right: {
+    isDown: boolean;
+  };
+  space: {
+    isDown: boolean;
+  };
+  pointer: {
+    isDown: boolean;
+  };
 }

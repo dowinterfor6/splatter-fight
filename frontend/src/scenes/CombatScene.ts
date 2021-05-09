@@ -10,18 +10,17 @@ import {
   iChar,
   iSpriteNames,
 } from "../interfaces/interfaces";
-import Character from "../controllers/CharacterController";
+import CharacterController from "../controllers/CharacterController";
 import AnimationController from "../controllers/AnimationController";
 
 import { gameWidth, gameHeight } from "../index";
 import CloudController from "../controllers/CloudController";
+import EnemyController from "../controllers/EnemyController";
 
 class CombatScene extends Phaser.Scene {
   players: {
-    player1?: Character;
-    player2?: Character;
-    player1Container?: Phaser.GameObjects.Container;
-    player2Container?: Phaser.GameObjects.Container;
+    player1?: CharacterController;
+    player2?: CharacterController;
   };
   char: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
   platforms: Phaser.Physics.Arcade.StaticGroup;
@@ -107,20 +106,6 @@ class CombatScene extends Phaser.Scene {
   create() {
     console.log("Create");
 
-    // this.add.image(750, 150, this.spriteNames.CLOUD).setScale(0.3);
-    // this.add
-    //   .image(-20, 40, this.spriteNames.CLOUD)
-    //   .setScale(0.3)
-    //   .setOrigin(0, 0);
-    // this.add
-    //   .image(250, 150, this.spriteNames.CLOUD)
-    //   .setScale(0.3)
-    //   .setOrigin(0, 0);
-    // this.add
-    //   .image(400, 10, this.spriteNames.CLOUD)
-    //   .setScale(0.3)
-    //   .setOrigin(0, 0);
-
     this.cloudController = new CloudController(
       this,
       this.spriteNames.CLOUD,
@@ -136,7 +121,7 @@ class CombatScene extends Phaser.Scene {
 
     const playerStartingPosXOffset = 100;
 
-    this.players.player1 = new Character(
+    this.players.player1 = new CharacterController(
       this,
       playerStartingPosXOffset,
       200,
@@ -151,7 +136,22 @@ class CombatScene extends Phaser.Scene {
       10
     );
 
-    this.players.player2 = new Character(
+    // this.players.player2 = new CharacterController(
+    //   this,
+    //   gameWidth - playerStartingPosXOffset,
+    //   200,
+    //   this.spriteNames.RUN,
+    //   "left",
+    //   true,
+    //   this.animNames,
+    //   2,
+    //   500,
+    //   500,
+    //   100,
+    //   10
+    // );
+
+    this.players.player2 = new EnemyController(
       this,
       gameWidth - playerStartingPosXOffset,
       200,
@@ -163,7 +163,8 @@ class CombatScene extends Phaser.Scene {
       500,
       500,
       100,
-      10
+      10,
+      true
     );
 
     this.animationController = new AnimationController(
@@ -208,8 +209,8 @@ class CombatScene extends Phaser.Scene {
 
   update() {
     this.cloudController.update();
-    this.players.player1.updateChar();
-    this.players.player2.updateChar();
+    this.players.player1.update();
+    this.players.player2.update();
     this.p1HealthDisplay.setText(`${this.players.player1.health}%`);
     this.p2HealthDisplay.setText(`${this.players.player2.health}%`);
   }
@@ -221,7 +222,6 @@ class CombatScene extends Phaser.Scene {
       if (this.players.player1.charState.hasHit) return;
 
       this.players.player1.charState.hasHit = true;
-      // this.players.player1.paintSplatter();
       this.players.player2.takeDamage(this.players.player1.attackDamage);
     }
 
@@ -229,7 +229,6 @@ class CombatScene extends Phaser.Scene {
       if (this.players.player2.charState.hasHit) return;
 
       this.players.player2.charState.hasHit = true;
-      // this.players.player2.paintSplatter();
       this.players.player1.takeDamage(this.players.player2.attackDamage);
     }
   }
