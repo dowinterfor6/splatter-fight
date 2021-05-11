@@ -18,12 +18,14 @@ export interface iKeypress {
   };
 }
 
+// TODO: Is this the best way to do this?
 export interface iSpriteNames {
-  RUN: string;
-  JUMP: string;
-  ATTACK: string;
-  GROUND: string;
-  CLOUD: string;
+  RUN?: string;
+  JUMP?: string;
+  ATTACK?: string;
+  GROUND?: string;
+  CLOUD?: string;
+  TITLE?: string;
 }
 
 export interface iAnimNames {
@@ -58,4 +60,8 @@ export interface iEnemyKeypress {
   pointer: {
     isDown: boolean;
   };
+}
+
+export interface iSceneTransitionData {
+  gameType: "AI";
 }

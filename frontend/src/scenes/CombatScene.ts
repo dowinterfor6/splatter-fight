@@ -8,6 +8,7 @@ import {
   iAnimNames,
   iAttackHitbox,
   iChar,
+  iSceneTransitionData,
   iSpriteNames,
 } from "../interfaces/interfaces";
 import CharacterController from "../controllers/CharacterController";
@@ -36,7 +37,7 @@ class CombatScene extends Phaser.Scene {
   p2HealthDisplay: Phaser.GameObjects.Text;
 
   constructor() {
-    super({});
+    super("CombatScene");
 
     this.spriteNames = {
       RUN: "RUN",
@@ -57,9 +58,12 @@ class CombatScene extends Phaser.Scene {
     this.players = {};
   }
 
-  preload() {
-    console.log("Preload");
+  // Passing value when switching scene
+  init({ gameType }: iSceneTransitionData) {
+    console.log(gameType);
+  }
 
+  preload() {
     const runSpritesheetDetails = {
       frameWidth: 470,
       frameHeight: 234,
@@ -104,8 +108,6 @@ class CombatScene extends Phaser.Scene {
   }
 
   create() {
-    console.log("Create");
-
     this.cloudController = new CloudController(
       this,
       this.spriteNames.CLOUD,
@@ -135,21 +137,6 @@ class CombatScene extends Phaser.Scene {
       100,
       10
     );
-
-    // this.players.player2 = new CharacterController(
-    //   this,
-    //   gameWidth - playerStartingPosXOffset,
-    //   200,
-    //   this.spriteNames.RUN,
-    //   "left",
-    //   true,
-    //   this.animNames,
-    //   2,
-    //   500,
-    //   500,
-    //   100,
-    //   10
-    // );
 
     this.players.player2 = new EnemyController(
       this,

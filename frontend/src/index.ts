@@ -1,6 +1,7 @@
 import * as Phaser from "phaser";
 
 import CombatScene from "./scenes/CombatScene";
+import MainMenuScene from "./scenes/MainMenuScene";
 
 export const gameWidth = 800;
 export const gameHeight = 600;
@@ -17,7 +18,7 @@ const config = {
     },
   },
   backgroundColor: "#f1f1f1",
-  scene: [CombatScene],
+  scene: [MainMenuScene, CombatScene],
 };
 
 const game = new Phaser.Game(config);
