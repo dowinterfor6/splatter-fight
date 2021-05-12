@@ -71,4 +71,5 @@ export interface iSceneImageNames {
   SETTINGS: string;
   HELP: string;
   SELECTOR: string;
+  SOON_TM: string;
 }

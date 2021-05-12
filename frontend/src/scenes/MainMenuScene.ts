@@ -2,12 +2,13 @@ import { gameHeight, gameWidth } from "..";
 import { iSceneImageNames } from "../interfaces/interfaces";
 
 // import title from "../assets/Title.png";
-import tempTitle from "../assets/TempTitle.png";
-import singlePlayer from "../assets/SinglePlayer.png";
-import multiPlayer from "../assets/Multiplayer.png";
-import settings from "../assets/Settings.png";
-import help from "../assets/Help.png";
-import selector from "../assets/Selector.png";
+import tempTitle from "../assets/TempTitle2.png";
+import singlePlayer from "../assets/SinglePlayer2.png";
+import multiPlayer from "../assets/Multiplayer2.png";
+import settings from "../assets/Settings2.png";
+import help from "../assets/Info.png";
+import selector from "../assets/Selector2.png";
+import soonTm from "../assets/SoonTm.png";
 
 class MainMenuScene extends Phaser.Scene {
   sceneImageNames: iSceneImageNames;
@@ -23,6 +24,7 @@ class MainMenuScene extends Phaser.Scene {
       SETTINGS: "settings",
       HELP: "help",
       SELECTOR: "selector",
+      SOON_TM: "soonTM",
     };
   }
 
@@ -33,6 +35,7 @@ class MainMenuScene extends Phaser.Scene {
     this.load.image(this.sceneImageNames.SETTINGS, settings);
     this.load.image(this.sceneImageNames.HELP, help);
     this.load.image(this.sceneImageNames.SELECTOR, selector);
+    this.load.image(this.sceneImageNames.SOON_TM, soonTm);
   }
   create() {
     const center = {
@@ -45,26 +48,28 @@ class MainMenuScene extends Phaser.Scene {
       dy: center.y / 10,
     };
 
-    this.add
-      .image(center.x, center.y - 4 * increment.dy, this.sceneImageNames.TITLE)
-      .setScale(0.6);
+    this.add.image(
+      center.x,
+      center.y - 6 * increment.dy,
+      this.sceneImageNames.TITLE
+    );
 
     const positions = {
       spButton: {
         x: center.x,
-        y: center.y + 2.5 * increment.dy,
+        y: center.y - 1 * increment.dy,
       },
       mpButton: {
         x: center.x,
-        y: center.y + 5 * increment.dy,
+        y: center.y + 2 * increment.dy,
       },
       settingsButton: {
-        x: center.x - 1.5 * increment.dx,
-        y: center.y + 7.5 * increment.dy,
+        x: center.x,
+        y: center.y + 5 * increment.dy,
       },
-      helpButton: {
-        x: center.x + 1.5 * increment.dx,
-        y: center.y + 7.5 * increment.dy,
+      infoButton: {
+        x: center.x,
+        y: center.y + 8 * increment.dy,
       },
     };
 
@@ -74,7 +79,6 @@ class MainMenuScene extends Phaser.Scene {
         positions.spButton.y,
         this.sceneImageNames.SINGLE_PLAYER
       )
-      .setScale(0.5)
       .setInteractive({ useHandCursor: true });
 
     // TODO: I wonder if there's a better way (action creators/function generators?)
@@ -96,8 +100,13 @@ class MainMenuScene extends Phaser.Scene {
         positions.mpButton.y,
         this.sceneImageNames.MULTI_PLAYER
       )
-      .setScale(0.5)
       .setInteractive({ useHandCursor: true });
+
+    const mpSoonTm = this.add.image(
+      positions.mpButton.x,
+      positions.mpButton.y,
+      this.sceneImageNames.SOON_TM
+    );
 
     multiPlayerButton.on("pointerover", () => {
       this.moveSelectorTo(positions.mpButton.x, positions.mpButton.y);
@@ -111,24 +120,60 @@ class MainMenuScene extends Phaser.Scene {
       console.log("mp click");
     });
 
-    // TODO: Change to text?
     const settingsButton = this.add
       .image(
         positions.settingsButton.x,
         positions.settingsButton.y,
         this.sceneImageNames.SETTINGS
       )
-      .setScale(0.2)
       .setInteractive({ useHandCursor: true });
 
-    const helpButton = this.add
+    const settingsSoonTm = this.add.image(
+      positions.settingsButton.x,
+      positions.settingsButton.y,
+      this.sceneImageNames.SOON_TM
+    );
+
+    settingsButton.on("pointerover", () => {
+      this.moveSelectorTo(
+        positions.settingsButton.x,
+        positions.settingsButton.y
+      );
+    });
+
+    settingsButton.on("pointerout", () => {
+      this.selector.setVisible(false);
+    });
+
+    settingsButton.on("pointerup", () => {
+      console.log("settings click");
+    });
+
+    const infoButton = this.add
       .image(
-        positions.helpButton.x,
-        positions.helpButton.y,
+        positions.infoButton.x,
+        positions.infoButton.y,
         this.sceneImageNames.HELP
       )
-      .setScale(0.2)
       .setInteractive({ useHandCursor: true });
+
+    const infoSoonTm = this.add.image(
+      positions.infoButton.x,
+      positions.infoButton.y,
+      this.sceneImageNames.SOON_TM
+    );
+
+    infoButton.on("pointerover", () => {
+      this.moveSelectorTo(positions.infoButton.x, positions.infoButton.y);
+    });
+
+    infoButton.on("pointerout", () => {
+      this.selector.setVisible(false);
+    });
+
+    infoButton.on("pointerup", () => {
+      console.log("info click");
+    });
 
     this.selector = this.add
       .image(
@@ -136,7 +181,6 @@ class MainMenuScene extends Phaser.Scene {
         center.y + 7.5 * increment.dy,
         this.sceneImageNames.SELECTOR
       )
-      .setScale(0.4)
       .setVisible(false);
   }
 
