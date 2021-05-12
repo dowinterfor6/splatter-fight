@@ -52,6 +52,7 @@ class EnemyController extends CharacterController {
       },
     };
 
+    // TODO: I think i have a memory leak somewhere
     this.initAi();
   }
 

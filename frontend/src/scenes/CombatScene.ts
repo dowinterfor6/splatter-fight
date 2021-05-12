@@ -120,6 +120,7 @@ class CombatScene extends Phaser.Scene {
 
     this.platforms = this.physics.add.staticGroup();
     this.platforms.create(0, gameHeight, this.spriteNames.GROUND);
+    this.platforms.scaleX(2);
 
     const playerStartingPosXOffset = 100;
 

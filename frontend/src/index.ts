@@ -3,8 +3,8 @@ import * as Phaser from "phaser";
 import CombatScene from "./scenes/CombatScene";
 import MainMenuScene from "./scenes/MainMenuScene";
 
-export const gameWidth = 800;
-export const gameHeight = 600;
+export const gameWidth = 1080;
+export const gameHeight = 720;
 
 const config = {
   type: Phaser.AUTO,

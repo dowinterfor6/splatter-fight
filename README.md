@@ -12,3 +12,4 @@
   - With latency
   - lol gl
 - Connect with strangers, "matchmaking"
+- Size all the assets properly
