@@ -1,7 +1,6 @@
 import { gameHeight, gameWidth } from "..";
 import { iSceneImageNames } from "../interfaces/interfaces";
 
-// import title from "../assets/Title.png";
 import tempTitle from "../assets/TempTitle2.png";
 import singlePlayer from "../assets/SinglePlayer2.png";
 import multiPlayer from "../assets/Multiplayer2.png";
